@@ -41,7 +41,7 @@ section .game {
   grid-column: 2/4;
 }
 .game .score-box {
-  width: 80%;
+  width: 90%;
   height: auto;
   text-align: center;
   display: flex;
@@ -56,6 +56,7 @@ section .game {
   width: 90px;
   transition: .5s;
   cursor: pointer;
+  outline: none;
 }
 .score-box button:hover{ background-color: white; color: #232526; }
 .game .game-box {
@@ -74,12 +75,10 @@ section .game {
   border-radius: 20px;
 }
 
+/* buttons colors */
 .game-box .b1 { background-color: #00acee; }
 .game-box .b2 { background-color: #25d366; }
 .game-box .b3 { background-color: #bd081c; }
 .game-box .b4 { background-color: #6441a5; }
 
-.game-box .b1:hover { box-shadow: 0px 0px 20px -1px #00C1FF; }
-.game-box .b2:hover { box-shadow: 0px 0px 20px -1px #2EFF7B; }
-.game-box .b3:hover { box-shadow: 0px 0px 20px -1px #FF0A27; }
-.game-box .b4:hover { box-shadow: 0px 0px 20px -1px #9A63FF; }
+ audio { display: none; }
