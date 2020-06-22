@@ -1,4 +1,4 @@
-/***************************** All the variables ******************************+*/
+/***************************** Global variables ******************************+*/
 
 // get the buttons
 const btn1 = document.getElementById('btn1');
@@ -9,10 +9,9 @@ const btn4 = document.getElementById('btn4');
 // get the start button
 const btnSatrt = document.getElementById('start');
 
-// get the sound, the turn and the score
+// get the sound and the turn
 const sound = document.getElementById('sound');
 const turnCard = document.getElementById('turn');
-const scoreCard = document.getElementById('score');
 
 // put them in an array
 const buttons = [ btn1, btn2, btn3, btn4 ];
@@ -24,15 +23,51 @@ const shadows = [ '#00C1FF' , '#2EFF7B', '#FF0A27', '#9A63FF' ];
 const lightColors = [ '#4bc7f7', '#34ff80', '#ff1631', '#8d5de8' ];
 const defaultColors = [ '#00acee', '#25d366', '#bd081c', '#6441a5' ];
 
-// the arrays for the secuence numbers and player tags
-let secuence = [];
-let tags = [];
+/***************************** Private variables ******************************+*/
 
-// the score
-let score = 0;
+// function for init the game stats, usign clousres or "private methods and variables"
+function initGameState() {
+  // the arrays for the secuence numbers and player tags
+  let secuence = [];
+  let tags = [];
+  // the score
+  let score = 0;
+  // started game, it starts in false
+  let startedGame = false;
+  // the score card
+  const scoreCard = document.getElementById('score-box');
 
-// started game?
-let startedGame = false;
+  // return functions to know and set the game state
+  return {
+    // add to secuence
+    addSecuence : function(n) { secuence.push(n); },
+    // get the secuence
+    getSecuence : function() { return secuence; },
+    // reset the secuence
+    resetSecuence : function() { secuence = []; },
+    // add to tags and get the tags
+    addTags : function(n) { tags.push(n); },
+    // get the tags
+    getTags : function() { return tags; },
+    // reset the tags
+    resetTags : function() { tags = []; },
+    // increase the score
+    sumScore : function() { score += 1; scoreCard.innerHTML = score; },
+    // reset the score
+    resetScore : function() { score = 0; scoreCard.innerHTML = score; },
+    // get the score
+    getScore : function() { return score; },
+    // know if the game is started
+    getStartedGame : function() { return startedGame; },
+    // set the game to stated
+    start : function() { startedGame = true; },
+    // set the game to ended or not started
+    end : function() { startedGame = false; }
+  }
+}
+
+// inicialize the game state
+let game = initGameState();
 
 /********************************** Secondary functions *******************************/
 // secondary functions do not use other functions defined in the scope
@@ -98,42 +133,36 @@ const compareArray = (arr1, arr2) => {
 // function for check that the n tag is correct
 const checkTag = (number) => {
   // true if the n tag and secuence is the same
-  return secuence[number] === tags[number];
+  return game.getSecuence()[number] === game.getTags()[number];
 }
 
-// function to set score in sc
-const setScore = (sc) => {
-  scoreCard.innerHTML = sc;
+/********************************** Primary functions *******************************/
+// Primary functions use secondary functions, and Private variables
+
+// function for start the game
+const startGame = () => {
+  // set the game started for allow the player and machine play
+  game.start();
+  // set the turn to machine
+  setTurn(false);
+  // let the machine start the game
+  playMachine();
 }
 
 // function for end the game
 const endGame = () => {
   // the game has ended
-  startedGame = false;
+  game.end();
   // reset the tags and secuence
-  tags = [];
-  secuence = [];
+  game.resetSecuence();
+  game.resetTags();
   // nobody has the turn, the game has ended
   turnCard.innerHTML = 'Nadie';
   turnCard.style.color = '#fff';
   // send an alert with the final score
-  alert(`buen intento, tu puntaje fue de ${score}`);
+  alert(`Buen intento, tu puntaje fue de ${game.getScore()}`);
   // reset the score
-  score = 0;
-  setScore(score);
-}
-
-/********************************** Primary functions *******************************/
-// Primary functions use secondary functions
-
-// function for start the game
-const startGame = () => {
-  // set the game started for allow the player and machine play
-  startedGame = true;
-  // set the turn to machine
-  setTurn(false);
-  // let the machine start the game
-  playMachine();
+  game.resetScore();
 }
 
 // function for let the player play and save the tag
@@ -141,18 +170,17 @@ const playerPlay = (btn) => {
   // press the btn
   pressBtn(btn);
   // if the game has started
-  if(startedGame){
+  if(game.getStartedGame()){
     // add the tag to tags
-    tags.push(btn);
+    game.addTags(btn);
     // if the player has ended the secuence
-    if(tags.length == secuence.length) {
+    if(game.getTags().length == game.getSecuence().length) {
       // if the tags and secuence is correct, the player play correctly
-      if(compareArray(secuence, tags)) {
+      if(compareArray(game.getTags(), game.getSecuence())) {
         // the player has play correctly, let the machine play, and sum to score
         // is +1 because this if is only for the last tag
-        score += 1;
+        game.sumScore();
         // set a time for performance
-        setScore(score);
         setTimeout(() => {
           // let the machine play to continue
           playMachine();
@@ -166,8 +194,8 @@ const playerPlay = (btn) => {
     } 
     // the sizes are diferent
     else {
-      // verify that the player tag correctly
-      let tag = tags.length - 1;
+      // verify that the player tag is correct
+      let tag = game.getTags().length - 1;
       // if the new tag is incorrect
       if(!checkTag(tag)) {
         // end the game
@@ -176,8 +204,7 @@ const playerPlay = (btn) => {
       // if the tag is correct
       else {
         // sum to score
-        score += 1;
-        setScore(score)
+        game.sumScore();
       }
     }
   }
@@ -185,27 +212,27 @@ const playerPlay = (btn) => {
 
 // function for press btns automaticly for the secuence and add numbers to this
 const playMachine = () => {
-  if(startedGame){
+  if(game.getStartedGame()){
     // set the turn of machine
     setTurn(false);
     // get a random number ~ 1,2,3,4
     let newNumber = Math.floor(Math.random() * 4) + 1;
     // add the number to the secuence
-    secuence.push(newNumber);
+    game.addSecuence(newNumber)
     // then the machine will play the new secuence
-    for(let i = 1; i <= secuence.length; i++){
+    for(let i = 1; i <= game.getSecuence().length; i++){
       // press the secuence in diferent times
-      setTimeout(() => pressBtn(secuence[i-1]), i * 800);
+      setTimeout(() => pressBtn(game.getSecuence()[i-1]), i * 800);
     }
     // let the player play, the time number is:
     // for the interval ends before the press of the secuence
-    setTimeout(() => setTurn(true), secuence.length * 1000);
+    setTimeout(() => setTurn(true), game.getSecuence().length * 1000);
     // reset the player tags to continue
-    tags = [];
+    game.resetTags();
   }  
 }
 
-/**** start the game at ****/
+/**** THE GAME START AT ****/
 btnSatrt.onclick = () => {
   startGame();
 }
