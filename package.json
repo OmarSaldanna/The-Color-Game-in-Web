@@ -1,0 +1,23 @@
+{
+  "name": "juegocolores",
+  "version": "1.0.0",
+  "description": "this is a videogame built using HTML,CSS and JS",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarSaldanna/The-Color-Game-in-Web.git"
+  },
+  "author": "OmarSaldanna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmarSaldanna/The-Color-Game-in-Web/issues"
+  },
+  "homepage": "https://github.com/OmarSaldanna/The-Color-Game-in-Web#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
