@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Colores</title>
+  <link rel="stylesheet" href="./assets/index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="./assets/icon.png">
+  <!-- fuente de google -->
+  <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <section>
+    <!-- column 1: text -->
+    <div class="text">
+      <h1>El Juego del Color</h1>
+      <p>En este juego pondrás a prueba tu memoria, memorizando y replicando secuencias de colores.</p>
+      
+      <h2>Instrucciones:</h2>
+      
+      <p>
+        <span>Para iniciar el juego persiona START</span>, a contintunación debes <span>prestar atencion al indicador de turno</span> si este dice maquina, no puedes tirar, <span>cuando diga TUYO ya podras jugar replicar la secuencia</span>. para juegar debes <span>presionar los botones que se iluminan replicando la secuencia</span> que estos siguen. El juego continuará hasta que repliques mal la secuencia y la cantidad de cuadros que aciertes será tu puntaje.
+      </p>
+      <h2>Hasta dónde Llegarás ?</h2>
+    </div>
+
+    <!-- column 1: game -->
+    <div class="game">
+      <div class="score-box">
+        <h2>Turno: <span id="turn">Nadie</span></h2>
+        <button id="start">START</button>
+        <h2>Puntaje: <span id="score">0</span></h2>
+      </div>
+      <div class="game-box">
+        <div class="box b1" id="btn1" onclick="playerPlay(1)"></div>
+        <div class="box b2" id="btn2" onclick="playerPlay(2)"></div>
+        <div class="box b3" id="btn3" onclick="playerPlay(3)"></div>
+        <div class="box b4" id="btn4" onclick="playerPlay(4)"></div>
+      </div>
+    </div>
+  </section>
+
+  <audio id="sound">
+    <source src="./assets/press.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="./assets/index.js"></script>
+</body>
+</html>
